@@ -1,43 +1,55 @@
-from tkinter import *
- 
-root = Tk()
-root.geometry("250x200")
-root1 = Tk()
-root1.geometry("200x250")
-entX = Entry(root)
-entX.pack()
-entY = Entry(root1,)
-entY.pack()
-entx = Entry()
-enty = Entry()
-entx.pack()
-enty.pack()
-def work(): 
-    need = 0
-    mult_mat = [ [0]*int(entX.get()) for i in range(int(entY.get()))]
-    maty = [ [0]*int(entX.get()) for i in range(int(entY.get()))]
-    matx = [ [0]*int(entX.get()) for i in range(int(entY.get()))]
-    matyENT = str(enty.get()).split("/")
-    matxENT = str(entx.get()).split(" ")
-    for y in range(int(entY.get())):
-        for x in range(int(entX.get())):
-            maty[y][x] = matyENT[need]
-            need += 1
-    print(maty)
-    need = 0
-    for y in range(int(entY.get())):
-        for x in range(int(entX.get())):
-            matx[y][x] = matxENT[need]
-            need += 1
-    print(matx)
-    for y in range (int(entY.get())):
-        for x in range(int(entX.get())):
-            mult_mat[y][x] = int(matx[y][x]) * int(maty[x][y])
-            print(f"{matx[y][x]} * {maty[x][y]} = {mult_mat[y][x]}")
-    lbl["text"] = mult_mat
-btn = Button(text="WORK PLEASE",command= work)
-btn.pack()
-lbl = Label(text = " ")
-lbl.pack()
-root1.mainloop()
+import tkinter as tk
+root = tk.Tk()
+
+def result():
+    matrix_x = int(matrix_X.get())
+    matrix_y = int(matrix_Y.get())
+    matrix1 = [["0" if entry_vars1[row][col].get() == "" else entry_vars1[row][col].get() for col in range(matrix_x)] for row in range(matrix_y)]
+    matrix2 = [["0" if entry_vars1[row][col].get() == "" else entry_vars1[row][col].get() for col in range(matrix_x)] for row in range(matrix_y)]
+    mult_mat = [[0]*matrix_x for i in range(matrix_y)]
+    
+    for y in range (matrix_y):
+        for x in range(matrix_x):
+            mult_mat[y][x] = int(matrix1[y][x]) * int(matrix2[x][y])
+            print(f"{matrix1[y][x]} * {matrix2[x][y]} = {mult_mat[y][x]}")
+    for row in range(matrix_y):
+        for col in range(matrix_x):
+            entry = tk.Entry(result_window, width=5)
+            entry.insert(0,mult_mat[row][col])
+            entry.grid(row=row, column=col, padx=5, pady=5)
+def create_matrix():
+    global entry_vars1, entry_vars2
+    matrix_x = int(matrix_X.get())
+    matrix_y = int(matrix_Y.get())
+    
+    entry_vars1 = [[tk.StringVar() for _ in range(matrix_x)] for _ in range(matrix_y)]
+    entry_vars2 = [[tk.StringVar() for _ in range(matrix_x)] for _ in range(matrix_y)]
+    
+    for row in range(matrix_y):
+        for col in range(matrix_x):
+            entry = tk.Entry(matrix1_window, textvariable=entry_vars1[row][col], width=5)
+            entry.grid(row=row, column=col, padx=5, pady=5)
+    
+    for row in range(matrix_y):
+        for col in range(matrix_x):
+            entry = tk.Entry(matrix2_window, textvariable=entry_vars2[row][col], width=5)
+            entry.grid(row=row, column=col, padx=5, pady=5)
+        
+matrix1_window = tk.Toplevel(root)
+matrix2_window = tk.Toplevel(root)
+result_window = tk.Toplevel(root)
+entry_vars1= []
+entry_vars2= []
+matrix_X = tk.Entry(root)
+matrix_X.insert(0, 0)
+matrix_Y = tk.Entry(root)
+matrix_Y.insert(0, 0)
+create_matrixs = tk.Button(root,text="Create Matrixs", command=create_matrix)
+get_result = tk.Button(root, command=result, text = "Result")
+
+matrix_X.pack()
+matrix_Y.pack()
+create_matrixs.pack()
+get_result.pack()
 root.mainloop()
+
